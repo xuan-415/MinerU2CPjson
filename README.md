@@ -1,106 +1,81 @@
-# Paperfilter with Deduplication v1
+# MinerU2json
 
-A document processing tool for academic papers that includes advanced paragraph-level deduplication, exact-match deduplication, filtering, and paragraph reordering.
+A document processing tool for cleaning, filtering, and deduplicating parsed academic papers. Supports paragraph reordering, merging, and advanced logging.
 
 ---
 
 ## Features
 
-- **Paragraph-Level Deduplication**  
-  Use MinHash LSH to identify and remove highly similar paragraphs.
-
-- **Exact-Match Deduplication**  
-  Hash-based detection of exactly identical paragraphs across or within documents.
-
-- **Sensitive Information Filtering**  
-  Filters out content containing excessive personal names, URLs, emails, phone numbers, and server addresses.
-
-- **Paragraph Reordering**  
-  Reorders misplaced paragraphs based on punctuation endings and perplexity scores computed with GPT-2.
-
-- **Text Merging**  
-  Merges text, table contents, and equations into coherent blocks for dataset generation.
-
-- **Logging**  
-  Detailed logging to both file and console, with timestamped log files.
-
-## Folder Structure
-
-```
-output/
-    Paper/
-        <Paper Folders>
-            auto/
-                *_content_list.json
-                *.md
-    all_paper_v5.json (output file)
-log/
-    Paper/
-        paper_processor_<timestamp>.log
-```
+- **Flexible Input Parsing**: Processes JSON+Markdown parsed papers.
+- **Sensitive Information Filtering**: Removes URLs, emails, phone numbers, server addresses, and excess personal names.
+- **Section Filtering**: Skips sections like "References", "Supporting Information", etc.
+- **Paragraph Reordering**: Corrects paragraph orders based on punctuation and GPT-2 perplexity.
+- **Merging**: Combines text, table, and equation entries into coherent text blocks.
+- **Deduplication**:
+  - Paragraph-level deduplication (MinHash LSH, fuzzy matching)
+  - Exact-match deduplication (SHA-256 hashing)
+- **Detailed Logging**: Logs to both console and timestamped files.
+- **Command-Line Interface**: Easily specify input and output paths with arguments.
 
 ## Installation
 
 ```bash
 pip install -r requirements.txt
-```
-
-**Required Libraries:**
-- `spacy`
-- `nltk`
-- `beautifulsoup4`
-- `datasketch`
-- `transformers`
-- `torch`
-
-Download the SpaCy English model if not already installed:
-
-```bash
 python -m spacy download en_core_web_sm
 ```
 
+**Key Libraries:**
+- `spacy`
+- `nltk`
+- `datasketch`
+- `beautifulsoup4`
+- `transformers`
+- `torch`
+
 ## Usage
 
-Modify the following lines in `main()` according to your folder paths:
-
-```python
-processor = PaperProcessor("../../output/Paper", "../output/all_paper_v5.json")
-processor.process()
+```bash
+python Paperfilter.py --input_folder path/to/parsed_papers --output_path path/to/output.json
 ```
 
-Then simply run:
+Example:
 
 ```bash
-python Paperfilter_with_deduplicate_v1.py
+python Paperfilter.py --input_folder ./output/Paper --output_path ./output/all_papers_v1.json
 ```
 
-## Workflow Overview
+## Folder Structure
 
-1. Scan folders containing parsed academic papers.
-2. Filter out invalid or noisy sections.
-3. Reorder misplaced paragraphs based on perplexity and punctuation heuristics.
-4. Merge text, tables, and equations.
-5. Apply paragraph-level deduplication.
-6. Apply exact-match deduplication.
-7. Save the cleaned dataset into a JSON file.
+```
+input_folder/
+  ├── Paper_A/
+  │    └── auto/
+  │         ├── paperA_content_list.json
+  │         └── paperA.md
+  ├── Paper_B/
+  │    └── auto/
+  │         ├── paperB_content_list.json
+  │         └── paperB.md
+...
+```
 
 ## Output Format
 
-Each dataset entry will look like:
+Each item in the output JSON:
 
 ```json
 {
-  "Folder Name": "Paper123",
+  "Folder Name": "Paper_A",
   "Paper Name": "Title of Paper",
-  "Text": "Merged and cleaned text content."
+  "Text": "Cleaned and merged text content."
 }
 ```
 
-## Notes
+## Advanced Options
 
-- The current perplexity model used is GPT-2 (`gpt2`).
-- Logging will create a timestamped `.log` file in `./log/Paper/`.
-- The deduplication threshold for MinHash is set to 0.9 similarity.
+- **MinHash Deduplication Threshold**: Default 0.9 similarity.
+- **Perplexity Threshold for Reordering**: Default 60.
+- **Minimum Merge Length**: Default 250 characters.
 
 ---
 
@@ -110,4 +85,8 @@ This project is licensed under the MIT License.
 
 ## Contact
 
-For questions or suggestions, feel free to open an issue or contact the maintainer.
+For issues, feature requests, or questions, please open an issue on GitHub.
+
+---
+
+> This README was generated based on the Paperfilter.py functionality (version 1).
