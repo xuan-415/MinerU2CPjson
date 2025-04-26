@@ -89,4 +89,4 @@ For issues, feature requests, or questions, please open an issue on GitHub.
 
 ---
 
-> This README was generated based on the Paperfilter.py functionality (version 1).
+
