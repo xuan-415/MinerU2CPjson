@@ -1,4 +1,4 @@
-# MinerU2json
+# MinerU2CPjson
 
 A document processing tool for cleaning, filtering, and deduplicating parsed academic papers. Supports paragraph reordering, merging, and advanced logging.
 
